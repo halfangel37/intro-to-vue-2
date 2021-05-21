@@ -8,7 +8,7 @@ Vue.component("product-details", {
   },
   template: `<div class="product-details">
               {{details}}
-              <button v-on:click="emitEventClick"> Emit Click !</button>
+              <button v-on:click="emitRemoveEvent"> Remove product</button>
               <div>
         <p v-if="!reviews.length">There are no reviews yet.</p>
         <ul v-else>
@@ -31,7 +31,7 @@ Vue.component("product-details", {
     };
   },
   methods: {
-    emitEventClick: function () {
+    emitRemoveEvent: function () {
       this.$emit("emit-event", this.selectedBookId);
     },
     addReview(productReview) {
@@ -41,7 +41,6 @@ Vue.component("product-details", {
 });
 
 Vue.component("product-review", {
-
   // form + v-model
   template: `
     <form class="review-form" @submit.prevent="onSubmit">
@@ -82,7 +81,7 @@ Vue.component("product-review", {
       </p>
       
       <p>
-        <input type="submit" value="Submit">  
+      <button type="submit" >Submit</button>
       </p>    
     
   </form>
