@@ -1,125 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello Vue 2</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello Vue 2</title>
+    <style>
+      body {
+        font-family: tahoma;
+        color: #282828;
+        margin: 0px;
+      }
 
-  <style>
-    body {
-      font-family: tahoma;
-      color: #282828;
-      margin: 0px;
-    }
+      .nav-bar {
+        background: linear-gradient(-90deg, #84cf6a, #16c0b0);
+        height: 60px;
+        margin-bottom: 15px;
+      }
 
-    .nav-bar {
-      background: linear-gradient(-90deg, #84CF6A, #16C0B0);
-      height: 60px;
-      margin-bottom: 15px;
-    }
+      .product {
+        display: flex;
+        flex-flow: wrap;
+        padding: 1rem;
+      }
 
-    .product {
-      display: flex;
-      flex-flow: wrap;
-      padding: 1rem;
-    }
+      img {
+        border: 1px solid #d8d8d8;
+        width: 600px;
+        height: 700px;
+        margin: 40px;
+        box-shadow: 0px 0.5px 1px #d8d8d8;
+      }
 
-    img {
-      border: 1px solid #d8d8d8;
-      width: 70%;
-      margin: 40px;
-      box-shadow: 0px .5px 1px #d8d8d8;
-    }
+      .product-image {
+        width: 80%;
+      }
 
-    .product-image {
-      width: 80%;
-    }
+      .product-image,
+      .product-info {
+        margin-top: 10px;
+        width: 50%;
+      }
 
-    .product-image,
-    .product-info {
-      margin-top: 10px;
-      width: 50%;
-    }
+      .color-box {
+        width: 40px;
+        height: 40px;
+        margin-top: 5px;
+      }
 
-    .color-box {
-      width: 40px;
-      height: 40px;
-      margin-top: 5px;
-    }
+      .cart {
+        margin-right: 25px;
+        float: right;
+        border: 1px solid #d8d8d8;
+        padding: 5px 20px;
+      }
 
-    .cart {
-      margin-right: 25px;
-      float: right;
-      border: 1px solid #d8d8d8;
-      padding: 5px 20px;
-    }
+      button {
+        margin-top: 30px;
+        border: none;
+        background-color: #1e95ea;
+        color: white;
+        height: 40px;
+        width: 100px;
+        font-size: 14px;
+        cursor: pointer;
+      }
 
-    button {
-      margin-top: 30px;
-      border: none;
-      background-color: #1E95EA;
-      color: white;
-      height: 40px;
-      width: 100px;
-      font-size: 14px;
-    }
+      .disabledButton {
+        background-color: #d8d8d8;
+      }
 
-    .disabledButton {
-      background-color: #d8d8d8;
-    }
+      .review-form {
+        width: 400px;
+        padding: 20px;
+        margin: 40px;
+        border: 1px solid #d8d8d8;
+      }
 
-    .review-form {
-      width: 400px;
-      padding: 20px;
-      margin: 40px;
-      border: 1px solid #d8d8d8;
-    }
+      #name {
+        width: 100%;
+        height: 25px;
+        margin-bottom: 20px;
+      }
 
-    input {
-      width: 100%;
-      height: 25px;
-      margin-bottom: 20px;
-    }
+      textarea {
+        width: 100%;
+        height: 60px;
+      }
 
-    textarea {
-      width: 100%;
-      height: 60px;
-    }
+      .tabs {
+        margin-left: 20px;
+        cursor: pointer;
+      }
 
-    .tabs {
-      margin-left: 20px;
-      cursor: pointer;
-    }
+      .activeTab {
+        color: #16c0b0;
+        text-decoration: underline;
+      }
+      .active {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
 
-    .activeTab {
-      color: #16C0B0;
-      text-decoration: underline;
-    }
-  </style>
-</head>
+  <body>
+    <div class="nav-bar"></div>
 
-<body>
+    <div id="app">
+      <!-- attribute binding -->
+      <div class="product-image">
+        <img v-bind:src="image" />
+      </div>
 
-  <div class="nav-bar"></div>
+      <!-- style binding -->
+      <div
+        class="color-box"
+        v-for="book in books"
+        :key="book.bookId"
+        :style="{ backgroundColor: book.bookColor }"
+        @mouseover="updateProduct(book.bookImage)"
+      ></div>
 
-  <div id="app">
+      <div class="product-info">
+        <!-- vue instance -->
+        <h1>{{title}}</h1>
+        <h1>{{ product }}</h1>
+        <p>{{ description }}</p>
 
-    <div class="product-image">
-      <img src="" />
+        <!-- class binding -->
+        <p :class="[inStock ? '':activeClass]">Out of Stock</p>
+
+        <!-- condition rendering -->
+        <span v-if="onSale">On Sale !</span>
+        <ul>
+          <!-- list rendering -->
+          <li v-for="book in books" :key="book.Id">{{ book.Name }}</li>
+        </ul>
+        <!-- events handling -->
+        <button v-on:click="addToCart">Add to cart</button>
+        <div class="cart">
+          <p>Cart({{ cart }})</p>
+        </div>
+        <button v-on:click="removeFromCart">Remove From Cart</button>
+
+      </div>
+      <!-- components  & communicating events  & form & v-model-->
+      <product-details
+        details="Hiệu đính by THĐP"
+        @emit-event="removeItem"
+      ></product-details>
+
     </div>
 
-    <div class="product-info">
-      <h1>{{ product }}</h1>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
 
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-
-  <script src="./main.js"></script>
-
-</body>
-
+    <script src="./main.js"></script>
+  </body>
 </html>
