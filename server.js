@@ -38,47 +38,58 @@ app.post("/register", (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      // You'll want to encrypt the password in a live app
+      // In a production app, you'll want to encrypt the password
     };
+    const data = JSON.stringify(user, null, 2);
 
-    var data = JSON.stringify(user, null, 2);
+    var dbUserEmail = require("./db/user.json").email;
+    var errorsToSend = [];
 
-    fs.writeFile("db/user.json", data, (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Added user to user.json");
-      }
-    });
-    // The secret key should be an evironment variable in a live app
-    const token = jwt.sign({ user }, "the_secret_key");
-    res.json({
-      token,
-      email: user.email,
-      name: user.name,
-    });
+    if (dbUserEmail === user.email) {
+      errorsToSend.push("An account with this email already exists.");
+    }
+    if (user.password.length < 5) {
+      errorsToSend.push("Password too short.");
+    }
+    if (errorsToSend.length > 0) {
+      res.status(400).json({ errors: errorsToSend });
+    } else {
+      fs.writeFile("./db/user.json", data, (err) => {
+        if (err) {
+          console.log(err + data);
+        } else {
+          const token = jwt.sign({ user }, "the_secret_key");
+          // In a production app, you'll want the secret key to be an environment variable
+          res.json({
+            token,
+            email: user.email,
+            name: user.name,
+          });
+        }
+      });
+    }
   } else {
-    res.sendStatus(401);
+    res.sendStatus(400);
   }
 });
 
 app.post("/login", (req, res) => {
-  var userDB = fs.readFileSync("./db/user.json");
-  var userInfo = JSON.parse(userDB);
+  const userDB = fs.readFileSync("./db/user.json");
+  const userInfo = JSON.parse(userDB);
   if (
     req.body &&
     req.body.email === userInfo.email &&
     req.body.password === userInfo.password
   ) {
-    // The secret key should be an environment variable in a live app
     const token = jwt.sign({ userInfo }, "the_secret_key");
+    // In a production app, you'll want the secret key to be an environment variable
     res.json({
       token,
       email: userInfo.email,
       name: userInfo.name,
     });
   } else {
-    res.sendStatus(401);
+    res.status(401).json({ error: "Invalid login. Please try again." });
   }
 });
 

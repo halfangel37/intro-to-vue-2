@@ -1,6 +1,8 @@
 <template>
   <div>
+   
     <form @submit.prevent="login">
+       <p>{{ error }}</p>
       <label for="email">
         Email:
       </label>
@@ -27,6 +29,7 @@ export default {
     return {
       email: "",
       password: "",
+      error: null,
     };
   },
   methods: {
@@ -38,6 +41,9 @@ export default {
         })
         .then(() => {
           this.$router.push({ name: "dashboard" });
+        })
+        .catch((err) => {
+          this.error = err.response.data.error;
         });
     },
   },

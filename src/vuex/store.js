@@ -16,6 +16,10 @@ export default new Vuex.Store({
         userData.token
       }`;
     },
+    LOGOUT() {
+      localStorage.removeItem("user");
+      location.reload();
+    },
   },
   actions: {
     register({ commit }, credentials) {
@@ -32,6 +36,14 @@ export default new Vuex.Store({
         .then(({ data }) => {
           commit("SET_USER_DATA", data);
         });
+    },
+    logout({ commit }) {
+      commit("LOGOUT");
+    },
+  },
+  getters: {
+    loggedIn(state) {
+      return !!state.user;
     },
   },
 });

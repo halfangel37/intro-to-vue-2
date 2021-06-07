@@ -1,5 +1,6 @@
 <template>
   <div>
+     
     <form @submit.prevent="register">
       <label for="name"> Name: </label>
       <input v-model="name" type="text" name="name" value />
@@ -11,6 +12,11 @@
       <input v-model="password" type="password" name value />
 
       <button type="submit" name="button">Register</button>
+      <ul>
+        <li v-for="(error, index) in errors" :key="index">
+          {{ error }}
+        </li>
+      </ul>
       <router-link to="/login">
         Already have an account? Login.
       </router-link>
@@ -25,6 +31,7 @@ export default {
       name: "",
       email: "",
       password: "",
+      errors: null,
     };
   },
   methods: {
@@ -37,6 +44,9 @@ export default {
         })
         .then(() => {
           this.$router.push({ name: "dashboard" });
+        })
+        .catch((err) => {
+          this.errors = err.response.data.errors;
         });
     },
   },

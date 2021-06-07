@@ -1,5 +1,5 @@
 body {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -34,8 +34,12 @@ form {
   flex-direction: column;
   width: 15em;
   margin-bottom: 2em;
-
+li {
+    font-size: 12px;
+    color: red;
+  }
   p {
+    font-size: 12px;
     color: red;
   }
 }
@@ -47,7 +51,7 @@ input {
   height: 2.6em;
   padding: 0.5em;
   margin-bottom: 1em;
-  font: 1em 'Avenir', Helvetica, sans-serif;
+  font: 1em "Avenir", Helvetica, sans-serif;
 }
 
 h1 {
